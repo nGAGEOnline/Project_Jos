@@ -14,6 +14,7 @@ namespace Scenes.Scripts
 		[SerializeField] private bool _looping = true;
 		
 		private RectTransform[] _children;
+		private Coroutine _coroutine;
 
 		// Start is called before the first frame update
 		void Start()
@@ -22,11 +23,14 @@ namespace Scenes.Scripts
 			// remove self from _children
 			_children = _children.Where(x => x != GetComponent<RectTransform>()).ToArray();
 
-			StartCoroutine(UpdatePositionsCoroutine());
+			_coroutine = StartCoroutine(UpdatePositionsCoroutine());
 		}
 
-
-
+		private void Update()
+		{
+			if (Input.GetKeyDown(KeyCode.Space))
+				_coroutine ??= StartCoroutine(UpdatePositionsCoroutine());
+		}
 		private IEnumerator UpdatePositionsCoroutine()
 		{
 			while (_looping)
