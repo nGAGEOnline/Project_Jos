@@ -1,107 +1,215 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Scenes.Scripts
 {
+	public enum ShuffleType
+	{
+		ShuffleLeft,
+		ShuffleRight,
+		ShuffleRandom
+	}
+	public enum ShuffleLayout
+	{
+		Block,
+		Horizontal,
+		Vertical
+	}
+	
 	public class Shuffle : MonoBehaviour
 	{
-		[SerializeField] private bool _shiftRight = true;
-		[SerializeField] private bool _useRandom = false;
+		private ShuffleLayout ShuffleLayout
+		{
+			get => _shuffleLayout;
+			set
+			{
+				_shuffleLayout = value;
+				UpdateLayoutText();
+				UpdateLayout();
+			}
+		}
+		private ShuffleType ShuffleType
+		{
+			get => _shuffleType;
+			set
+			{
+				_shuffleType = value;
+				UpdateShuffleStyleText();
+			}
+		}
+
+		[SerializeField] private ShuffleLayout _shuffleLayout = ShuffleLayout.Block;
+		[SerializeField] private TMP_Text _shuffleLayoutText;
+		[SerializeField] private ShuffleType _shuffleType = ShuffleType.ShuffleRight;
+		[SerializeField] private TMP_Text _shuffleTypeText;
 
 		[SerializeField][Range(0.1f, 2f)] private float _waitTime = 0.5f;
-		[SerializeField] private bool _looping = true;
 		
+		private bool _looping = true;
+		
+		private Vector2 _blockDimensions = new Vector2(210, 210);
+		private Vector2 _horizontalDimensions = new Vector2(430, 100);
+		private Vector2 _verticalDimensions = new Vector2(100, 430);
+
+		private RectTransform _self;
 		private RectTransform[] _children;
 		private Coroutine _coroutine;
 
-		// Start is called before the first frame update
-		void Start()
+		private void Start()
 		{
-			_children = GetComponentsInChildren<RectTransform>();
-			// remove self from _children
-			_children = _children.Where(x => x != GetComponent<RectTransform>()).ToArray();
-
-			_coroutine = StartCoroutine(UpdatePositionsCoroutine());
+			_self = GetComponent<RectTransform>();
+			_children = GetComponentsInChildren<RectTransform>()
+				.Where(x => x != transform)
+				.ToArray();
+			
+			UpdateLayoutText();
+			UpdateLayout();
+			UpdateShuffleStyleText();
+			_coroutine = StartCoroutine(ReorderCoroutine());
 		}
 
 		private void Update()
 		{
 			if (Input.GetKeyDown(KeyCode.Space))
-				_coroutine ??= StartCoroutine(UpdatePositionsCoroutine());
+				ToggleCoroutine();
 		}
-		private IEnumerator UpdatePositionsCoroutine()
+		
+		private void OnDisable()
+		{
+			StopCoroutine(_coroutine);
+			_coroutine = null;
+		}
+		
+		public void NextShuffle()
+		{
+			ShuffleType = ShuffleType switch
+			{
+				ShuffleType.ShuffleLeft => ShuffleType.ShuffleRight,
+				ShuffleType.ShuffleRight => ShuffleType.ShuffleRandom,
+				ShuffleType.ShuffleRandom => ShuffleType.ShuffleLeft,
+				_ => throw new ArgumentOutOfRangeException()
+			};
+		}
+		public void PreviousShuffle()
+		{
+			ShuffleType = ShuffleType switch
+			{
+				ShuffleType.ShuffleLeft => ShuffleType.ShuffleRandom,
+				ShuffleType.ShuffleRight => ShuffleType.ShuffleLeft,
+				ShuffleType.ShuffleRandom => ShuffleType.ShuffleRight,
+				_ => throw new ArgumentOutOfRangeException()
+			};
+		}
+		private void UpdateShuffleStyleText()
+			=> _shuffleTypeText.text = ShuffleType.ToString();
+		
+		public void NextLayout()
+		{
+			ShuffleLayout = ShuffleLayout switch
+			{
+				ShuffleLayout.Block => ShuffleLayout.Horizontal,
+				ShuffleLayout.Horizontal => ShuffleLayout.Vertical,
+				ShuffleLayout.Vertical => ShuffleLayout.Block,
+				_ => throw new ArgumentOutOfRangeException()
+			};
+		}
+		public void PreviousLayout()
+		{
+			ShuffleLayout = ShuffleLayout switch
+			{
+				ShuffleLayout.Block => ShuffleLayout.Vertical,
+				ShuffleLayout.Horizontal => ShuffleLayout.Block,
+				ShuffleLayout.Vertical => ShuffleLayout.Horizontal,
+				_ => throw new ArgumentOutOfRangeException()
+			};
+		}
+		private void UpdateLayoutText() 
+			=> _shuffleLayoutText.text = _shuffleLayout.ToString();
+
+		private void UpdateLayout()
+		{
+			_self.sizeDelta = _shuffleLayout switch
+			{
+				ShuffleLayout.Block => _blockDimensions,
+				ShuffleLayout.Horizontal => _horizontalDimensions,
+				ShuffleLayout.Vertical => _verticalDimensions,
+				_ => throw new ArgumentOutOfRangeException()
+			};
+			
+			// Get the GridLayoutGroup component
+			var gridLayout = GetComponent<GridLayoutGroup>();
+    
+			// Calculate the layout input for the horizontal and vertical axes
+			gridLayout.CalculateLayoutInputHorizontal();
+			gridLayout.CalculateLayoutInputVertical();
+    
+			// Force the layout to update
+			LayoutRebuilder.ForceRebuildLayoutImmediate(_self);
+		}
+
+		private void ToggleCoroutine()
+		{
+			if (_coroutine != null)
+			{
+				StopCoroutine(_coroutine);
+				_coroutine = null;
+			}
+			else
+			{
+				_coroutine = StartCoroutine(ReorderCoroutine());
+			}
+		}
+		
+		private IEnumerator ReorderCoroutine()
 		{
 			while (_looping)
 			{
 				yield return new WaitForSeconds(_waitTime);
-				_children = (_useRandom
-						? ShuffleRandom(_children)
-						: ShiftArray(_children, _shiftRight))
-					.ToArray();
-
-				UpdatePositions(_children);
+				_children = _shuffleType switch
+				{
+					ShuffleType.ShuffleLeft => ShiftArray(_children).ToArray(),
+					ShuffleType.ShuffleRight => ShiftArray(_children, true).ToArray(),
+					ShuffleType.ShuffleRandom => ShuffleRandom(_children).ToArray(),
+					_ => throw new ArgumentOutOfRangeException()
+				};
+				UpdatePositions(ref _children);
+				
 				yield return new WaitForEndOfFrame();
 			}
 		}
 
-		private void UpdatePositions(IEnumerable<RectTransform> result)
+		private static void UpdatePositions(ref RectTransform[] result)
 		{
-
-			for (int i = 0; i < result.Count(); i++)
-			{
-				result.ElementAt(i).gameObject.SetActive(true);
-				// result.ElementAt(i).position = new Vector3(i, 0, 0);
-				Vector2 newPosition = Vector2.zero;
-				switch (i)
-				{
-					case 0:
-						newPosition = new Vector2(50, -50);
-						break;
-					case 1:
-						newPosition = new Vector2(160, -50);
-						break;
-					case 2:
-						newPosition = new Vector2(50, -160);
-						break;
-					case 3:
-						newPosition = new Vector2(160, -160);
-						break;
-				}
-				result.ElementAt(i).anchoredPosition = newPosition;
-			}
-
-			_children = result.ToArray();
+			for (var i = 0; i < result.Length; i++)
+				result.ElementAt(i).SetSiblingIndex(i);
 		}
 
-		public static IEnumerable<T> ShiftArray<T>(IReadOnlyList<T> arr, bool shiftRight)
+		private static IEnumerable<T> ShiftArray<T>(IReadOnlyCollection<T> sourceList, bool shiftRight = false)
 		{
-			int length = arr.Count;
-			T[] temp = new T[length];
+			var length = sourceList.Count;
+			var result = new T[length];
 
-			for (int i = 0; i < length; i++)
+			for (var i = 0; i < length; i++)
 			{
-				int newPos = i;
-				if (shiftRight)
-				{
-					newPos = (i + 1) % length;
-				}
-				else
-				{
-					newPos = (i - 1 + length) % length;
-				}
-				temp[newPos] = arr.ElementAt(i);
+				var newIndex = shiftRight ? 
+					(i + 1) % length 
+					: (i - 1 + length) % length;
+				result[newIndex] = sourceList.ElementAt(i);
 			}
-			return temp;
+			
+			return result;
 		}
 
-		public static IEnumerable<T> ShuffleRandom<T>(IReadOnlyList<T> arr)
+		private static IEnumerable<T> ShuffleRandom<T>(IEnumerable<T> arr)
 		{
-			// Create a new list from the input array
-			List<T> tempList = new List<T>(arr);
-
-			// Shuffle the list using Fisher-Yates algorithm
+			var tempList = new List<T>(arr);
+			
 			for (var i = tempList.Count - 1; i >= 1; i--)
 			{
 				var j = Random.Range(0, i + 1);
