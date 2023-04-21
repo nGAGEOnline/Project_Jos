@@ -207,9 +207,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1208154425}
-        m_TargetAssemblyTypeName: Scenes.Scripts.Shuffle, Assembly-CSharp
-        m_MethodName: NextShuffle
+      - m_Target: {fileID: 165922998}
+        m_TargetAssemblyTypeName: Scenes.TestUI, Assembly-CSharp
+        m_MethodName: NextShuffleType
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -342,7 +342,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 165922996}
-  - component: {fileID: 165922997}
+  - component: {fileID: 165922998}
+  - component: {fileID: 165922999}
   m_Layer: 5
   m_Name: TestBox
   m_TagString: Untagged
@@ -373,32 +374,36 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &165922997
+--- !u!114 &165922998
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 165922995}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Script: {fileID: 11500000, guid: 70d16c53a36d4354bb66f383a36c9e54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: -400
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 1
+  _boxLayout: 0
+  _shuffleType: 1
+  _waitTime: 0.5
+  _boxContainer: {fileID: 1208154425}
+--- !u!114 &165922999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165922995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835cc60520624769a9ed2b442f8da4db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shuffleTypeText: {fileID: 540721633}
+  _layoutText: {fileID: 817866968}
 --- !u!1 &217555509
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,9 +488,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1208154425}
-        m_TargetAssemblyTypeName: Scenes.Scripts.Shuffle, Assembly-CSharp
-        m_MethodName: PreviousShuffle
+      - m_Target: {fileID: 165922998}
+        m_TargetAssemblyTypeName: Scenes.TestUI, Assembly-CSharp
+        m_MethodName: PreviousShuffleType
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -617,8 +622,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1208154425}
-        m_TargetAssemblyTypeName: Scenes.Scripts.Shuffle, Assembly-CSharp
+      - m_Target: {fileID: 165922998}
+        m_TargetAssemblyTypeName: Scenes.TestUIController, Assembly-CSharp
         m_MethodName: NextLayout
         m_Mode: 1
         m_Arguments:
@@ -895,8 +900,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1208154425}
-        m_TargetAssemblyTypeName: Scenes.Scripts.Shuffle, Assembly-CSharp
+      - m_Target: {fileID: 165922998}
+        m_TargetAssemblyTypeName: Scenes.TestUI, Assembly-CSharp
         m_MethodName: PreviousLayout
         m_Mode: 1
         m_Arguments:
@@ -1151,7 +1156,7 @@ GameObject:
   - component: {fileID: 540721634}
   - component: {fileID: 540721633}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: ShiftStyle Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1197,7 +1202,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Toggle Layout
+  m_text: Shift/Shuffle
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1397,7 +1402,7 @@ GameObject:
   - component: {fileID: 817866969}
   - component: {fileID: 817866968}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Layout Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1699,7 +1704,7 @@ GameObject:
   - component: {fileID: 1120950714}
   - component: {fileID: 1120950713}
   m_Layer: 5
-  m_Name: Layout Text
+  m_Name: Layout
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1988,7 +1993,7 @@ GameObject:
   - component: {fileID: 1208154424}
   - component: {fileID: 1208154425}
   m_Layer: 5
-  m_Name: COLOR GRID
+  m_Name: COLOR UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2054,11 +2059,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa6fd539c0187a4483c6219bd1de7b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shuffleLayout: 0
-  _shuffleLayoutText: {fileID: 817866968}
-  _shuffleType: 1
-  _shuffleTypeText: {fileID: 540721633}
-  _waitTime: 1
 --- !u!222 &1208154427
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2079,7 +2079,7 @@ GameObject:
   - component: {fileID: 1273309772}
   - component: {fileID: 1273309771}
   m_Layer: 5
-  m_Name: ShiftStyle Text
+  m_Name: ShiftStyle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
