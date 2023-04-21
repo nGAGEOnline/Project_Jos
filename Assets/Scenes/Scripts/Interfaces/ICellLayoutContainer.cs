@@ -7,10 +7,9 @@ namespace Scenes.Interfaces
 	{
 		IEnumerator ReorderCoroutine();
 	}
-	public interface ILayoutContainer<out T> : ILayoutContainer where T : Component
+	public interface ICellLayoutContainer<T> : ILayoutContainer where T : Component
 	{
 		T Self { get; }
-		T[] Children { get; }
-		Coroutine Coroutine { get; }
+		IColorCell<T>[] Children { get; }
 	}
 }

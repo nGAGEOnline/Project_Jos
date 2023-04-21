@@ -10,12 +10,12 @@ namespace Scenes
 		[Header("UI Elements")]		
 		[SerializeField] private TMP_Text _layoutText;
 
-		private ShuffleController _shuffleController;
+		private CellsManager _cellsManager;
 
-		private void Awake() => _shuffleController = FindObjectOfType<ShuffleController>();
+		private void Awake() => _cellsManager = FindObjectOfType<CellsManager>();
 
-		private void OnEnable() => _shuffleController.OnLayoutChanged += UpdateLayoutText;
-		private void OnDisable() => _shuffleController.OnLayoutChanged -= UpdateLayoutText;
+		private void OnEnable() => _cellsManager.OnLayoutChanged += UpdateLayoutText;
+		private void OnDisable() => _cellsManager.OnLayoutChanged -= UpdateLayoutText;
 
 		private void UpdateLayoutText(LayoutStyle layoutStyle) => _layoutText.text = layoutStyle.ToString();
 	}

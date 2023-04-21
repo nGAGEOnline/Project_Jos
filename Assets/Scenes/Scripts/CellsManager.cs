@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Scenes
 {
-	public class ShuffleController : MonoBehaviour
+	public class CellsManager : MonoBehaviour
 	{
 		public event Action<LayoutStyle> OnLayoutChanged;
 		public event Action<ShuffleType> OnShuffleTypeChanged;

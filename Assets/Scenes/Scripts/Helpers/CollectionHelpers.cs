@@ -27,8 +27,25 @@ namespace Scenes.Helpers
 			return result;
 		}
 
-		public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source) 
-			=> new List<T>(source.OrderBy(x => Random.value));
+		public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
+		{
+			var enumerable = source as T[] ?? source.ToArray();
+			if (!enumerable.Any())
+				return enumerable;
+
+			var originalList = new List<T>(enumerable);
+			List<T> shuffledList;
+
+			do
+			{
+				shuffledList = new List<T>(originalList.OrderBy(x => Random.value));
+			} while (IsEqualToOriginalList(originalList, shuffledList));
+
+			return shuffledList;
+		}
+		private static bool IsEqualToOriginalList<T>(IEnumerable<T> originalList, IEnumerable<T> shuffledList) 
+			=> originalList.SequenceEqual(shuffledList);
+
 		public static IEnumerable<T> ShuffleOld<T>(this IEnumerable<T> source)
 		{
 			var result = new List<T>(source.OrderBy(x => Random.value));

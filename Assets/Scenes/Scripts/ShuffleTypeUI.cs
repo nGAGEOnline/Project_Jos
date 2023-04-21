@@ -18,41 +18,43 @@ namespace Scenes
 
 		[SerializeField] private Color _activeColor;
 		[SerializeField] private Color _inactiveColor;
+		[SerializeField] private Color _activeBackgroundColor;
+		[SerializeField] private Color _inactiveBackgroundColor;
 
-		private ShuffleController _shuffleController;
+		private CellsManager _cellsManager;
 
-		private void Awake() => _shuffleController = FindObjectOfType<ShuffleController>();
+		private void Awake() => _cellsManager = FindObjectOfType<CellsManager>();
 
-		private void OnEnable() => _shuffleController.OnShuffleTypeChanged += UpdateText;
-		private void OnDisable() => _shuffleController.OnShuffleTypeChanged -= UpdateText;
+		private void OnEnable() => _cellsManager.OnShuffleTypeChanged += UpdateText;
+		private void OnDisable() => _cellsManager.OnShuffleTypeChanged -= UpdateText;
 
 		private void UpdateText(ShuffleType shuffleType)
 		{
 			switch (shuffleType)
 			{
 				case ShuffleType.ShuffleLeft:
-					_leftBg.color = _activeColor;
-					_randomBg.color = _inactiveColor;
-					_rightBg.color = _inactiveColor;
-					_leftText.color = Color.white;
-					_randomText.color = Color.gray;
-					_rightText.color = Color.gray;
-					break;
-				case ShuffleType.ShuffleRight:
-					_leftBg.color = _inactiveColor;
-					_randomBg.color = _inactiveColor;
-					_rightBg.color = _activeColor;
-					_leftText.color = Color.gray;
-					_randomText.color = Color.gray;
-					_rightText.color = Color.white;
+					_leftText.color = _activeColor;
+					_leftBg.color = _activeBackgroundColor;
+					_randomText.color = _inactiveColor;
+					_randomBg.color = _inactiveBackgroundColor;
+					_rightText.color = _inactiveColor;
+					_rightBg.color = _inactiveBackgroundColor;
 					break;
 				case ShuffleType.ShuffleRandom:
-					_leftBg.color = _inactiveColor;
-					_randomBg.color = _activeColor;
-					_rightBg.color = _inactiveColor;
-					_leftText.color = Color.gray;
-					_randomText.color = Color.white;
-					_rightText.color = Color.gray;
+					_leftText.color = _inactiveColor;
+					_leftBg.color = _inactiveBackgroundColor;
+					_randomText.color = _activeColor;
+					_randomBg.color = _activeBackgroundColor;
+					_rightText.color = _inactiveColor;
+					_rightBg.color = _inactiveBackgroundColor;
+					break;
+				case ShuffleType.ShuffleRight:
+					_leftText.color = _inactiveColor;
+					_leftBg.color = _inactiveBackgroundColor;
+					_randomText.color = _inactiveColor;
+					_randomBg.color = _inactiveBackgroundColor;
+					_rightText.color = _activeColor;
+					_rightBg.color = _activeBackgroundColor;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(shuffleType), shuffleType, null);

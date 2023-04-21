@@ -8,35 +8,32 @@ using UnityEngine;
 
 namespace Scenes
 {
-	public class LayoutContainer2D : MonoBehaviour, ILayoutContainer<Transform>
+	public class CellLayoutContainer : MonoBehaviour, ICellLayoutContainer<Transform>
 	{
 		public Transform Self { get; private set; }
-		public Transform[] Children { get; private set; }
-		public Coroutine Coroutine { get; private set; }
+		public IColorCell<Transform>[] Children { get; private set; }
 		
 		private ShuffleType _shuffleType;
-		private ShuffleController _shuffleController;
+		private CellsManager _cellsManager;
 		private Vector2[] _targetPositions;
 
 		private void Awake()
 		{
-			_shuffleController ??= FindObjectOfType<ShuffleController>();
+			_cellsManager ??= FindObjectOfType<CellsManager>();
 			Self = GetComponent<Transform>();
-			Children = GetComponentsInChildren<Transform>()
-				.Where(x => x != transform)
-				.ToArray();
+			Children = GetComponentsInChildren<IColorCell<Transform>>().ToArray();
 		}
 		
 		private void OnEnable()
 		{
-			_shuffleController ??= FindObjectOfType<ShuffleController>();
-			_shuffleController.OnLayoutChanged += UpdateLayout;
-			_shuffleController.OnShuffleTypeChanged += SetShuffleType;
+			_cellsManager ??= FindObjectOfType<CellsManager>();
+			_cellsManager.OnLayoutChanged += UpdateLayout;
+			_cellsManager.OnShuffleTypeChanged += SetShuffleType;
 		}
 		private void OnDisable()
 		{
-			_shuffleController.OnLayoutChanged -= UpdateLayout;
-			_shuffleController.OnShuffleTypeChanged -= SetShuffleType;
+			_cellsManager.OnLayoutChanged -= UpdateLayout;
+			_cellsManager.OnShuffleTypeChanged -= SetShuffleType;
 		}
 
 		private void UpdateLayout(LayoutStyle layoutStyle)
@@ -56,7 +53,7 @@ namespace Scenes
 		{
 			while (true)
 			{
-				yield return new WaitForSeconds(_shuffleController.WaitTime);
+				yield return new WaitForSeconds(_cellsManager.WaitTime);
 				
 				Children = _shuffleType switch
 				{
@@ -69,10 +66,11 @@ namespace Scenes
 				for (var i = 0; i < Children.Length; i++)
 				{
 					var child = Children.ElementAt(i);
-					child.SetSiblingIndex(i);
+					child.SpriteRenderer.sortingOrder = i;
+					child.Transform.SetSiblingIndex(i);
 					var targetPosition = _targetPositions[i];
 
-					StartCoroutine(EaseToPosition(child, targetPosition, _shuffleController.TransitionTime));
+					StartCoroutine(EaseToPosition(child.Transform, targetPosition, _cellsManager.TransitionTime));
 				}
 				
 				yield return null;
