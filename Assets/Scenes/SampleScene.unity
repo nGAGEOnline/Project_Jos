@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 37317748}
   - component: {fileID: 37317747}
   m_Layer: 5
-  m_Name: Next
+  m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -161,7 +161,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 40, y: 40}
+  m_SizeDelta: {x: 100, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &37317747
 MonoBehaviour:
@@ -208,15 +208,15 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 165922998}
-        m_TargetAssemblyTypeName: Scenes.TestUI, Assembly-CSharp
-        m_MethodName: NextShuffleType
-        m_Mode: 1
+        m_TargetAssemblyTypeName: Scenes.ShuffleController, Assembly-CSharp
+        m_MethodName: SetShuffleType
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: right
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &37317748
@@ -232,7 +232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5019608, g: 0.5019608, b: 0.5031899, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -343,7 +343,6 @@ GameObject:
   m_Component:
   - component: {fileID: 165922996}
   - component: {fileID: 165922998}
-  - component: {fileID: 165922999}
   m_Layer: 5
   m_Name: TestBox
   m_TagString: Untagged
@@ -389,21 +388,6 @@ MonoBehaviour:
   _boxLayout: 0
   _shuffleType: 1
   _waitTime: 0.5
-  _boxContainer: {fileID: 1208154425}
---- !u!114 &165922999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 165922995}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 835cc60520624769a9ed2b442f8da4db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _shuffleTypeText: {fileID: 540721633}
-  _layoutText: {fileID: 817866968}
 --- !u!1 &217555509
 GameObject:
   m_ObjectHideFlags: 0
@@ -417,7 +401,7 @@ GameObject:
   - component: {fileID: 217555512}
   - component: {fileID: 217555511}
   m_Layer: 5
-  m_Name: Previous
+  m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -442,7 +426,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 40, y: 40}
+  m_SizeDelta: {x: 100, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &217555511
 MonoBehaviour:
@@ -489,15 +473,15 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 165922998}
-        m_TargetAssemblyTypeName: Scenes.TestUI, Assembly-CSharp
-        m_MethodName: PreviousShuffleType
-        m_Mode: 1
+        m_TargetAssemblyTypeName: Scenes.ShuffleController, Assembly-CSharp
+        m_MethodName: SetShuffleType
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: left
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &217555512
@@ -513,7 +497,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1202,7 +1186,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Shift/Shuffle
+  m_text: Random
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1636,6 +1620,7 @@ GameObject:
   m_Component:
   - component: {fileID: 963438069}
   - component: {fileID: 963438070}
+  - component: {fileID: 963438071}
   m_Layer: 5
   m_Name: Layout Buttons
   m_TagString: Untagged
@@ -1692,6 +1677,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &963438071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963438068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835cc60520624769a9ed2b442f8da4db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _layoutText: {fileID: 817866968}
 --- !u!1 &1120950710
 GameObject:
   m_ObjectHideFlags: 0
@@ -1903,7 +1901,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <
+  m_text: Left
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1936,7 +1934,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
   m_fontSizeMax: 0
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1993,7 +1991,7 @@ GameObject:
   - component: {fileID: 1208154424}
   - component: {fileID: 1208154425}
   m_Layer: 5
-  m_Name: COLOR UI
+  m_Name: Layout Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2078,8 +2076,9 @@ GameObject:
   - component: {fileID: 1273309770}
   - component: {fileID: 1273309772}
   - component: {fileID: 1273309771}
+  - component: {fileID: 1273309773}
   m_Layer: 5
-  m_Name: ShiftStyle
+  m_Name: Random
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2104,7 +2103,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 40}
+  m_SizeDelta: {x: 130, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1273309771
 MonoBehaviour:
@@ -2144,6 +2143,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1273309769}
   m_CullTransparentMesh: 1
+--- !u!114 &1273309773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1273309769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1273309771}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 165922998}
+        m_TargetAssemblyTypeName: Scenes.ShuffleController, Assembly-CSharp
+        m_MethodName: SetShuffleType
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: random
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1451110667
 GameObject:
   m_ObjectHideFlags: 0
@@ -2472,7 +2527,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '>'
+  m_text: Right
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2505,7 +2560,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
   m_fontSizeMax: 0
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -2559,6 +2614,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2058726990}
   - component: {fileID: 2058726991}
+  - component: {fileID: 2058726992}
   m_Layer: 5
   m_Name: ShiftStyle Buttons
   m_TagString: Untagged
@@ -2587,7 +2643,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -300}
-  m_SizeDelta: {x: 320, y: 40}
+  m_SizeDelta: {x: 400, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2058726991
 MonoBehaviour:
@@ -2615,3 +2671,23 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &2058726992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2058726989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8243cf0e59af4531b7c70508824fe61b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _leftText: {fileID: 1164182542}
+  _randomText: {fileID: 540721633}
+  _rightText: {fileID: 1930403859}
+  _leftBg: {fileID: 217555512}
+  _randomBg: {fileID: 1273309771}
+  _rightBg: {fileID: 37317748}
+  _activeColor: {r: 0.6342839, g: 0.6415094, b: 0.63243145, a: 0}
+  _inactiveColor: {r: 0.21698111, g: 0.21698111, b: 0.21698111, a: 0}

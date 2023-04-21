@@ -27,9 +27,11 @@ namespace Scenes.Helpers
 			return result;
 		}
 
-		public static IEnumerable<T> ShuffleRandom<T>(IEnumerable<T> source)
+		public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source) 
+			=> new List<T>(source.OrderBy(x => Random.value));
+		public static IEnumerable<T> ShuffleOld<T>(this IEnumerable<T> source)
 		{
-			var result = new List<T>(source);
+			var result = new List<T>(source.OrderBy(x => Random.value));
 			
 			for (var i = result.Count - 1; i >= 1; i--)
 			{
