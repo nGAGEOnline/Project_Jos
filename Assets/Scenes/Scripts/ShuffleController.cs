@@ -7,13 +7,16 @@ namespace Scenes
 {
 	public class ShuffleController : MonoBehaviour
 	{
-		public event Action<BoxLayout> OnLayoutChanged;
+		public event Action<LayoutStyle> OnLayoutChanged;
 		public event Action<ShuffleType> OnShuffleTypeChanged;
-		
+		public float WaitTime => _waitTime;
+		public float TransitionTime => _transitionTime;
+
 		[Header("Settings")]
-		[SerializeField] private BoxLayout _boxLayout = BoxLayout.Block;
+		[SerializeField] private LayoutStyle _layoutStyle = LayoutStyle.Block;
 		[SerializeField] private ShuffleType _shuffleType = ShuffleType.ShuffleRight;
 		[SerializeField][Range(0.1f, 2f)] private float _waitTime = 0.5f;
+		[SerializeField][Range(0.1f, 2f)] private float _transitionTime = 0.5f;
 		private float _lastWaitTime;
 		
 		private ILayoutContainer _layoutContainer;
@@ -27,7 +30,7 @@ namespace Scenes
 
 		private void Start()
 		{
-			OnLayoutChanged?.Invoke(_boxLayout);	
+			OnLayoutChanged?.Invoke(_layoutStyle);	
 			OnShuffleTypeChanged?.Invoke(_shuffleType);
 			
 			_coroutine = StartCoroutine(_layoutContainer.ReorderCoroutine());
@@ -41,12 +44,6 @@ namespace Scenes
 
 		private void Update()
 		{
-			if (Math.Abs(_lastWaitTime - _waitTime) > 0.01f)
-			{
-				_layoutContainer.WaitTime = _waitTime;
-				_lastWaitTime = _waitTime;
-			}
-			
 			if (Input.GetKeyDown(KeyCode.Space))
 				ToggleCoroutine();
 			
@@ -75,25 +72,25 @@ namespace Scenes
 
 		public void PreviousLayout()
 		{
-			_boxLayout = _boxLayout switch
+			_layoutStyle = _layoutStyle switch
 			{
-				BoxLayout.Block => BoxLayout.Vertical,
-				BoxLayout.Horizontal => BoxLayout.Block,
-				BoxLayout.Vertical => BoxLayout.Horizontal,
+				LayoutStyle.Block => LayoutStyle.Vertical,
+				LayoutStyle.Horizontal => LayoutStyle.Block,
+				LayoutStyle.Vertical => LayoutStyle.Horizontal,
 				_ => throw new ArgumentOutOfRangeException()
 			};
-			OnLayoutChanged?.Invoke(_boxLayout);
+			OnLayoutChanged?.Invoke(_layoutStyle);
 		}
 		public void NextLayout()
 		{
-			_boxLayout = _boxLayout switch
+			_layoutStyle = _layoutStyle switch
 			{
-				BoxLayout.Block => BoxLayout.Horizontal,
-				BoxLayout.Horizontal => BoxLayout.Vertical,
-				BoxLayout.Vertical => BoxLayout.Block,
+				LayoutStyle.Block => LayoutStyle.Horizontal,
+				LayoutStyle.Horizontal => LayoutStyle.Vertical,
+				LayoutStyle.Vertical => LayoutStyle.Block,
 				_ => throw new ArgumentOutOfRangeException()
 			};
-			OnLayoutChanged?.Invoke(_boxLayout);
+			OnLayoutChanged?.Invoke(_layoutStyle);
 		}
 
 		public void PreviousShuffleType()

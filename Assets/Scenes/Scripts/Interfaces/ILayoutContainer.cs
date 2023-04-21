@@ -5,7 +5,12 @@ namespace Scenes.Interfaces
 {
 	public interface ILayoutContainer
 	{
-		float WaitTime { get; set; }
 		IEnumerator ReorderCoroutine();
+	}
+	public interface ILayoutContainer<out T> : ILayoutContainer where T : Component
+	{
+		T Self { get; }
+		T[] Children { get; }
+		Coroutine Coroutine { get; }
 	}
 }

@@ -9,13 +9,14 @@ using UnityEngine.UI;
 
 namespace Scenes
 {
-	public class LayoutContainerUI : MonoBehaviour, ILayoutContainer
+	public class LayoutContainer : MonoBehaviour, ILayoutContainer<RectTransform>
 	{
 		public float WaitTime { get; set; } = 1f;
 
-		private RectTransform _self;
-		private RectTransform[] _children;
-		private Coroutine _coroutine;
+		public RectTransform Self { get; private set; }
+		public RectTransform[] Children { get; private set; }
+		public Coroutine Coroutine { get; private set; }
+		
 		private ShuffleType _shuffleType;
 
 		private ShuffleController _shuffleController;
@@ -25,8 +26,8 @@ namespace Scenes
 		{
 			_shuffleController ??= FindObjectOfType<ShuffleController>();
 			_gridLayout = GetComponent<GridLayoutGroup>();
-			_self = GetComponent<RectTransform>();
-			_children = GetComponentsInChildren<RectTransform>()
+			Self = GetComponent<RectTransform>();
+			Children = GetComponentsInChildren<RectTransform>()
 				.Where(x => x != transform)
 				.ToArray();
 		}
@@ -37,11 +38,28 @@ namespace Scenes
 			_shuffleController.OnLayoutChanged += UpdateLayout;
 			_shuffleController.OnShuffleTypeChanged += SetShuffleType;
 		}
-
 		private void OnDisable()
 		{
 			_shuffleController.OnLayoutChanged -= UpdateLayout;
 			_shuffleController.OnShuffleTypeChanged -= SetShuffleType;
+		}
+
+		private void UpdateLayout(LayoutStyle layoutStyle)
+		{
+			Self.sizeDelta = layoutStyle switch
+			{
+				LayoutStyle.Block => new Vector2(210, 210),
+				LayoutStyle.Horizontal => new Vector2(430, 100),
+				LayoutStyle.Vertical => new Vector2(100, 430),
+				_ => throw new ArgumentOutOfRangeException()
+			};
+
+			// Calculate the layout input for the horizontal and vertical axes
+			_gridLayout.CalculateLayoutInputHorizontal();
+			_gridLayout.CalculateLayoutInputVertical();
+
+			// Force the layout to update
+			LayoutRebuilder.ForceRebuildLayoutImmediate(Self);
 		}
 
 		private void SetShuffleType(ShuffleType shuffleType) => _shuffleType = shuffleType;
@@ -51,37 +69,20 @@ namespace Scenes
 			while (true)
 			{
 				yield return new WaitForSeconds(WaitTime);
-				_children = _shuffleType switch
+				Children = _shuffleType switch
 				{
-					ShuffleType.ShuffleLeft => _children.ShiftLeft().ToArray(),
-					ShuffleType.ShuffleRight => _children.ShiftRight().ToArray(),
-					ShuffleType.ShuffleRandom => _children.Shuffle().ToArray(),
+					ShuffleType.ShuffleLeft => Children.ShiftLeft().ToArray(),
+					ShuffleType.ShuffleRight => Children.ShiftRight().ToArray(),
+					ShuffleType.ShuffleRandom => Children.Shuffle().ToArray(),
 					_ => throw new ArgumentOutOfRangeException()
 				};
 
-				for (var i = 0; i < _children.Length; i++)
-					_children.ElementAt(i).SetSiblingIndex(i);
+				for (var i = 0; i < Children.Length; i++)
+					Children.ElementAt(i).SetSiblingIndex(i);
 
 				yield return new WaitForEndOfFrame();
 			}
 		}
 
-		private void UpdateLayout(BoxLayout layout)
-		{
-			_self.sizeDelta = layout switch
-			{
-				BoxLayout.Block => new Vector2(210, 210),
-				BoxLayout.Horizontal => new Vector2(430, 100),
-				BoxLayout.Vertical => new Vector2(100, 430),
-				_ => throw new ArgumentOutOfRangeException()
-			};
-
-			// Calculate the layout input for the horizontal and vertical axes
-			_gridLayout.CalculateLayoutInputHorizontal();
-			_gridLayout.CalculateLayoutInputVertical();
-
-			// Force the layout to update
-			LayoutRebuilder.ForceRebuildLayoutImmediate(_self);
-		}
 	}
 }

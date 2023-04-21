@@ -1,6 +1,6 @@
 ﻿namespace Scenes.Enums
 {
-	public enum BoxLayout
+	public enum LayoutStyle
 	{
 		Block,
 		Horizontal,

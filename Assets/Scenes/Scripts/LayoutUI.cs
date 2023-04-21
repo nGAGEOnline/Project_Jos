@@ -17,6 +17,6 @@ namespace Scenes
 		private void OnEnable() => _shuffleController.OnLayoutChanged += UpdateLayoutText;
 		private void OnDisable() => _shuffleController.OnLayoutChanged -= UpdateLayoutText;
 
-		private void UpdateLayoutText(BoxLayout layout) => _layoutText.text = layout.ToString();
+		private void UpdateLayoutText(LayoutStyle layoutStyle) => _layoutText.text = layoutStyle.ToString();
 	}
 }
